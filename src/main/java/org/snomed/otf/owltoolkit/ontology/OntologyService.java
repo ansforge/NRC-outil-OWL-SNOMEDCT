@@ -459,6 +459,12 @@ public class OntologyService {
 						// Add preferred synonym as "skos:prefLabel"
 						//labelUri = SKOS_PREF_LABEL_URI;
 						labelUri = RDFS_LABEL;
+						
+						if(ANGLAIS_GB.equals(languageAndDialect)) {
+							languageAndDialect = ANGLAIS;
+							labelUri = SKOS_ALT_LABEL_URI;
+						}
+							
 						if (ANGLAIS_USA.equals(languageAndDialect))
 							languageAndDialect = ANGLAIS;
 							
@@ -527,13 +533,27 @@ public class OntologyService {
 			
 			if (Concepts.FSN.equals(typeId)) {
 				
-				int firstIndex = term.indexOf("(")+1;
-				int lastIndex = term.indexOf(")");
+				List<Integer> firstIdex = new ArrayList<Integer>();
+				List<Integer> lastIdex = new ArrayList<Integer>();
+				
+				for(int i =0; i <term.length(); i++) {
+					
+					
+					if(  Character.valueOf('(').compareTo(term.charAt(i)) == 0 ) {
+						
+						firstIdex.add(i);
+					}
+					else if(  Character.valueOf(')').compareTo(term.charAt(i)) == 0 ) {
+						
+						lastIdex.add(i);
+					}
+				}
 				
 				 axioms.add(factory.getOWLAnnotationAssertionAxiom(
 							factory.getOWLAnnotationProperty(IRI.create(typeUri)),
 							IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
-							factory.getOWLLiteral(term.substring(firstIndex, lastIndex))));
+							factory.getOWLLiteral(term.substring(firstIdex.get(firstIdex.size()-1)+1,
+					        		   lastIdex.get(lastIdex.size()-1)))));
 				
 			}
 			
