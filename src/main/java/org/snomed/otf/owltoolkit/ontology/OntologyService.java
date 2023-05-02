@@ -432,9 +432,6 @@ public class OntologyService {
 
 	private void addDescriptionAnnotations(Long conceptId, SnomedTaxonomy snomedTaxonomy, Set<OWLAxiom> axioms, Map<Long, String> langRefsetToDialectMap) {
 		
-		//Set<String> listeDefinition = new HashSet<String>();
-		//Set<String> listeLabel = new HashSet<String>();
-		//Set<String> listeAltLabel = new HashSet<String>();
 		
 		for (Description description : snomedTaxonomy.getConceptDescriptions(conceptId)) {
 			
@@ -459,12 +456,6 @@ public class OntologyService {
 						// Add preferred synonym as "skos:prefLabel"
 						//labelUri = SKOS_PREF_LABEL_URI;
 						labelUri = RDFS_LABEL;
-						
-						if(ANGLAIS_GB.equals(languageAndDialect)) {
-							languageAndDialect = ANGLAIS;
-							labelUri = SKOS_ALT_LABEL_URI;
-						}
-							
 						if (ANGLAIS_USA.equals(languageAndDialect))
 							languageAndDialect = ANGLAIS;
 							
