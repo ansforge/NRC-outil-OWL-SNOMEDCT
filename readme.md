@@ -1,4 +1,23 @@
-# Snomed OWL Toolkit [![Build Status](https://travis-ci.org/IHTSDO/snomed-owl-toolkit.svg?branch=master)](https://travis-ci.org/IHTSDO/snomed-owl-toolkit) [![codecov](https://codecov.io/gh/IHTSDO/snomed-owl-toolkit/branch/master/graph/badge.svg)](https://codecov.io/gh/IHTSDO/snomed-owl-toolkit)
+# Outil OWL SNOMED CT
+
+## Fork de l'outil [SNOMED OWL Toolkit](https://github.com/IHTSDO/snomed-owl-toolkit)
+
+Ce fork a été réalisé pour prendre en compte les spécificités nécessaires à la publication de la SNOMED CT dans le SMT.
+
+Nos modifications ajoute le préfixe `nrc` (`<http://data.esante.gouv.fr/NRC-France/SCT#>`) et ajoute ou modifie les informations suivantes :
+
+| Type d'information  | Cardinalité par concept | Propriété originale | Propriété du fork   |
+|:--------------------|:-----------------------:|:--------------------|:--------------------|
+| Identifiant         | 1..1                    | -                   | skos:notation       |
+| Statut de définition| 1..1                    | -                   | nrc:definitionStatus|
+| Suffixe sémantique  | 1..1                    | -                   | dc:type             |
+| FSN                 | 1..1                    | rdfs:label          | nrc:fsn             |
+| Terme préféré       | 1..1                    | skos:prefLabel      | rdfs:label          |
+| Synonyme            | 0..*                    | skos:altLabel       | skos:altLabel       |
+| Définition textuelle| 0..1                    | skos:definition     | skos:definition     |
+
+
+## Introduction
 
 An Open Source Toolkit to make SNOMED CT to OWL conversion and classification simple.
 
@@ -11,12 +30,14 @@ A classification REST API using this toolkit is available, see the [Classificati
   - Works on the command line
   - Uses MRCM Attribute Domain Reference Set for grouping information
   - Uses OWL Axiom Reference Set
-  - Includes all descriptions:
-    - Fully Specified Names as rdfs:label
-    - Preferred Synonyms as skos:prefLabel
+  - Includes :
+    - SNOMED CT identifier as skos:notation
+    - Definition status as nrc:definitionStatus
+    - Semantic tag as dc:type
+    - Fully Specified Names as nrc:fsn
+    - Preferred Synonyms as rdfs:label
     - Other Synonyms as skos:altLabel
     - Text Definitions as skos:definition
-    - Language and dialect markup
   - Support for Snomed Editions and Extensions
   - *For Java integration see RF2ToOWLService.java*
 - Classify Snomed
