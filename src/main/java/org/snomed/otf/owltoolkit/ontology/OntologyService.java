@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Ce fichier a été modifié pour répondre aux besoins de
+ * la publication sur le SMT.
+ */
 package org.snomed.otf.owltoolkit.ontology;
 
 import com.google.common.base.Strings;
@@ -67,8 +72,8 @@ public class OntologyService {
 	public static final String LANGUAGE_REFSET_DIALECT_MAP_PROPERTIES = "language-refset-dialect-map.properties";
    
 	// NRC URIs
-	private static final String NRC_PREFIX = "nrc";
-	private static final String NRC_URI = "http://data.esante.gouv.fr/NRC-France/SCT#";
+	private static final String NRC_PREFIX = "sct-ext";
+	private static final String NRC_URI = "http://data.esante.gouv.fr/NRC-France/sct-ext#";
 	private static final String NRC_definition_Status_URI = NRC_URI + "definitionStatus";
 	private static final String NRC_FSN_URI = NRC_URI + "fsn";
 	

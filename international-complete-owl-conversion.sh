@@ -22,11 +22,11 @@ if [ "$#" -ne 2 ]; then
   exit 1;
 fi
 
-owlToolkitJar="`ls target/snomed-owl-toolkit*-executable.jar | tail -n1`"
+owlToolkitJar="`ls target/outil-owl-snomedct*executable.jar | tail -n1`"
 snapshot=$1
 delta=$2
 if [ ! -f $owlToolkitJar ]; then
-  echo "SNOMED OWL Toolkit jar not found!"
+  echo "Outil OWL SNOMED CT jar not found!"
   exit 1;
 fi
 if [ ! -f $snapshot ]; then

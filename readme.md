@@ -4,14 +4,14 @@
 
 Ce fork a été réalisé pour prendre en compte les spécificités nécessaires à la publication de la SNOMED CT dans le SMT.
 
-Nos modifications ajoute le préfixe `nrc` (`<http://data.esante.gouv.fr/NRC-France/SCT#>`) et ajoute ou modifie les informations suivantes :
+Nos modifications ajoute le préfixe `sct-ext` (`<http://data.esante.gouv.fr/NRC-France/sct-ext#>`) et ajoute ou modifie les informations suivantes :
 
 | Type d'information  | Cardinalité par concept | Propriété originale | Propriété du fork   |
 |:--------------------|:-----------------------:|:--------------------|:--------------------|
 | Identifiant         | 1..1                    | -                   | skos:notation       |
-| Statut de définition| 1..1                    | -                   | nrc:definitionStatus|
+| Statut de définition| 1..1                    | -                   | sct-ext:definitionStatus|
 | Suffixe sémantique  | 1..1                    | -                   | dc:type             |
-| FSN                 | 1..1                    | rdfs:label          | nrc:fsn             |
+| FSN                 | 1..1                    | rdfs:label          | sct-ext:fsn             |
 | Terme préféré       | 1..1                    | skos:prefLabel      | rdfs:label          |
 | Synonyme            | 0..*                    | skos:altLabel       | skos:altLabel       |
 | Définition textuelle| 0..1                    | skos:definition     | skos:definition     |
@@ -32,9 +32,9 @@ A classification REST API using this toolkit is available, see the [Classificati
   - Uses OWL Axiom Reference Set
   - Includes :
     - SNOMED CT identifier as skos:notation
-    - Definition status as nrc:definitionStatus
+    - Definition status as sct-ext:definitionStatus
     - Semantic tag as dc:type
-    - Fully Specified Names as nrc:fsn
+    - Fully Specified Names as sct-ext:fsn
     - Preferred Synonyms as rdfs:label
     - Other Synonyms as skos:altLabel
     - Text Definitions as skos:definition
@@ -74,7 +74,7 @@ state of that entire axiom must be in the extension using the same OWL Axiom ref
 This toolkit has been developed for use in other Java applications as a library but some functionality
 can be used via the command line.
 
-The 'executable' jar file is available on the [latest release](https://github.com/IHTSDO/snomed-owl-toolkit/releases) page for use on the command line.
+The 'executable' jar file is available on the [latest release](https://github.com/ansforge/NRC-outil-OWL-SNOMEDCT/releases) page for use on the command line.
 
 Command line options:
 ```
@@ -120,7 +120,7 @@ Convert Snomed RF2 files to an OWL ontology file with functional syntax.
 
 Using the executable jar supply a zip file which contains RF2 snapshot files as an argument.
 ```bash
-java -Xms4g -jar snomed-owl-toolkit*executable.jar -rf2-to-owl -rf2-snapshot-archives SnomedCT_InternationalRF2.zip
+java -Xms4g -jar outil-owl-snomedct*executable.jar -rf2-to-owl -rf2-snapshot-archives SnomedCT_InternationalRF2.zip
 ```
 After about a minute the OWL ontology file will be written to `ontology-xxxx.owl` including a timestamp in the name.
 
@@ -132,7 +132,7 @@ Run the classification process.
 
 Using the executable jar supply a zip file which contains RF2 snapshot files as an argument.
 ```bash
-java -Xms4g -jar snomed-owl-toolkit*executable.jar -classify -rf2-snapshot-archives SnomedCT_InternationalRF2.zip
+java -Xms4g -jar outil-owl-snomedct*executable.jar -classify -rf2-snapshot-archives SnomedCT_InternationalRF2.zip
 ```
 After about one and a half minutes an RF2 delta archive will be written to `classification-results-xxxx.zip` including a timestamp in the name.
 

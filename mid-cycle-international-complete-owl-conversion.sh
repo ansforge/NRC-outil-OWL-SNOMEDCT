@@ -25,14 +25,14 @@ if [ "$#" -ne 3 ]; then
   exit 1;
 fi
 
-owlToolkitJar="`ls target/snomed-owl-toolkit*-executable.jar | tail -n1`"
+owlToolkitJar="`ls target/outil-owl-snomedct*executable.jar | tail -n1`"
 termServer_export_snapshot=$1
 published_owl_snapshot=$2
 delta=$3
 
 
 if [ ! -f $owlToolkitJar ]; then
-  echo "SNOMED OWL Toolkit jar not found!"
+  echo "Outil OWL SNOMED CT jar not found!"
   exit 1;
 fi
 if [ ! -f $termServer_export_snapshot ]; then
