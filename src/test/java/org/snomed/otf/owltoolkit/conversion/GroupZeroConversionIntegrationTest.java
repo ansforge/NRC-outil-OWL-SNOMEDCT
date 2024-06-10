@@ -1,8 +1,9 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.conversion;
 
 import org.junit.Test;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.snomed.otf.owltoolkit.service.ReasonerServiceException;
 import org.snomed.otf.owltoolkit.service.SnomedReasonerService;
 import org.snomed.otf.owltoolkit.service.classification.TestFileUtil;
 import org.snomed.otf.owltoolkit.util.OptionalFileInputStream;
@@ -11,12 +12,10 @@ import org.snomed.otf.snomedboot.testutil.ZipUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.snomed.otf.owltoolkit.service.SnomedReasonerService.ELK_REASONER_FACTORY;
 import static org.snomed.otf.owltoolkit.service.classification.TestFileUtil.readInferredRelationshipLinesTrim;
 
@@ -42,7 +41,6 @@ public class GroupZeroConversionIntegrationTest {
 
 		// Convert stated relationships to OWL Axiom refset
 		File baseRF2SnapshotZip = ZipUtil.zipDirectoryRemovingCommentsAndBlankLines("src/test/resources/SnomedCT_MiniRF2_Base_snapshot");
-//		File baseRF2DeltaZip = ZipUtil.zipDirectoryRemovingCommentsAndBlankLines("src/test/resources/SnomedCT_MiniRF2_Add_Laterality_delta");
 		File owlOutputZip = Files.createTempFile("OWL_Delta", ".zip").toFile();
 		try (FileInputStream snapshotStream = new FileInputStream(baseRF2SnapshotZip);
 			 OptionalFileInputStream deltaStream = new OptionalFileInputStream(null);

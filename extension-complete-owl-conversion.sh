@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 #
+# Ce fichier a été modifié suite à la modification du nom du projet après le fork.
+#
+
+#
 # This script is for converting a SNOMED CT extension using stated relationships to Complete OWL using axioms.
 #
 # The script provides an automated repeatable process to support testing and production upgrade of extensions to SNOMED International 20190731 edition.
@@ -28,12 +32,12 @@ if [ "$#" -ne 3 ]; then
   exit 1;
 fi
 
-owlToolkitJar="`ls target/snomed-owl-toolkit*-executable.jar | tail -n1`"
+owlToolkitJar="`ls target/outil-owl-snomedct*-executable.jar | tail -n1`"
 previous_snapshot=$1
 int_snapshot=$2
 delta=$3
 if [ ! -f $owlToolkitJar ]; then
-  echo "SNOMED OWL Toolkit jar not found!"
+  echo "Outil OWL SNOMED CT jar not found!"
   exit 1;
 fi
 if [ ! -f $previous_snapshot ]; then

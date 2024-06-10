@@ -1,3 +1,6 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.service;
 
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
@@ -16,7 +19,6 @@ public class RF2ExtractionWriter extends ImpotentComponentFactory implements Aut
 
 	public static final String TAB = "\t";
 
-	private final File outputDirectory;
 	private final Set<Long> conceptIds;
 	private final Set<Long> descriptionIds;
 
@@ -28,12 +30,11 @@ public class RF2ExtractionWriter extends ImpotentComponentFactory implements Aut
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public RF2ExtractionWriter(Set<Long> conceptIds, String dateString, File outputDirectory) throws IOException {
+	public RF2ExtractionWriter(Set<Long> conceptIds, String dateString) throws IOException {
 		this.conceptIds = new LongOpenHashSet(conceptIds);
 		this.descriptionIds = new LongOpenHashSet();
-		this.outputDirectory = outputDirectory;
 
-		File snapshotDir = new File(outputDirectory, "Snapshot");
+		File snapshotDir = new File("Snapshot");
 		createDirectoryOrThrow(snapshotDir);
 
 		File terminologyDir = new File(snapshotDir, "Terminology");

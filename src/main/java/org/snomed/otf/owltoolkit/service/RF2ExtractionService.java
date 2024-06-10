@@ -1,3 +1,6 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.service;
 
 import com.google.common.collect.Sets;
@@ -24,7 +27,7 @@ public class RF2ExtractionService {
 		logger.info("Extracting {} concepts from RF2.", conceptIds.size());
 		ReleaseImporter releaseImporter = new ReleaseImporter();
 		String dateString = ClassificationResultsWriter.DATE_FORMAT.format(new Date());
-		try (RF2ExtractionWriter extractionWriter = new RF2ExtractionWriter(conceptIds, dateString, outputDirectory)) {
+		try (RF2ExtractionWriter extractionWriter = new RF2ExtractionWriter(conceptIds, dateString)) {
 			releaseImporter.loadEffectiveSnapshotReleaseFileStreams(rf2SnapshotArchives.getFileInputStreams(), LoadingProfile.complete, extractionWriter, false);
 		}
 		logger.info("Extraction complete.");

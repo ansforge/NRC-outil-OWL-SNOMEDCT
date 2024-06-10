@@ -1,8 +1,10 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.ontology;
 
 import com.google.common.collect.Lists;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.snomed.otf.owltoolkit.constants.Concepts;

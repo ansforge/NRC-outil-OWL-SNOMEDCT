@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.service.classification;
 
 import org.slf4j.Logger;
@@ -21,22 +25,16 @@ import org.snomed.otf.snomedboot.testutil.ZipUtil;
 import org.springframework.util.StreamUtils;
 
 import java.io.*;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.stream.StreamSupport;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class TestFileUtil {
 

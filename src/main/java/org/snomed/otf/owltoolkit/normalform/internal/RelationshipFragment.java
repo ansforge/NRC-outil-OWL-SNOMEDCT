@@ -18,10 +18,13 @@
  *
  * Original author law223 - initial implementation in Snorocket SNOMED API
  */
+
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.normalform.internal;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import org.snomed.otf.owltoolkit.classification.ReasonerTaxonomy;
 import org.snomed.otf.owltoolkit.domain.Relationship;
@@ -166,29 +169,6 @@ public final class RelationshipFragment implements SemanticComparable<Relationsh
 			// Concrete relationships can not take part in a property chain because a concrete value has no model or ancestors.
 		}
 		return false;
-	}
-
-	private boolean isDestinationExhaustive() {
-		return isExhaustive(getDestinationId());
-	}
-
-	private boolean hasCommonExhaustiveSuperType(final RelationshipFragment other) {
-
-		final Set<Long> valueAncestors = relationshipNormalFormGenerator.getReasonerTaxonomy().getAncestors(getDestinationId());
-		final Set<Long> otherValueAncestors = relationshipNormalFormGenerator.getReasonerTaxonomy().getAncestors(other.getDestinationId());
-		final Set<Long> commonAncestors = Sets.intersection(valueAncestors, otherValueAncestors);
-
-		for (Long commonAncestor : commonAncestors) {
-			if (isExhaustive(commonAncestor)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private boolean isExhaustive(final long conceptId) {
-		return relationshipNormalFormGenerator.getSnomedTaxonomy().isExhaustive(conceptId);
 	}
 
 	/**
