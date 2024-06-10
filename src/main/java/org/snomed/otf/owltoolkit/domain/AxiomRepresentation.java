@@ -1,8 +1,10 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.domain;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class AxiomRepresentation {
 

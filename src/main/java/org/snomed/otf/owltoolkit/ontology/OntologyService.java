@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Ce fichier a été modifié suite au fork, pour répondre aux besoins de la publication sur le SMT.
+ */
 package org.snomed.otf.owltoolkit.ontology;
 
 import com.google.common.base.Strings;
@@ -27,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.snomed.otf.owltoolkit.constants.Concepts;
 import org.snomed.otf.owltoolkit.domain.AxiomRepresentation;
 import org.snomed.otf.owltoolkit.domain.Relationship;
+import org.snomed.otf.owltoolkit.domain.Relationship.ConcreteValue;
 import org.snomed.otf.owltoolkit.ontology.render.SnomedFunctionalSyntaxDocumentFormat;
 import org.snomed.otf.owltoolkit.ontology.render.SnomedFunctionalSyntaxStorerFactory;
 import org.snomed.otf.owltoolkit.ontology.render.SnomedPrefixManager;
@@ -42,7 +47,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static java.lang.Long.parseLong;
-import static org.snomed.otf.owltoolkit.domain.Relationship.*;
 
 @SuppressWarnings("Guava")
 public class OntologyService {
@@ -60,10 +64,30 @@ public class OntologyService {
 	// SKOS URIs
 	private static final String SKOS_PREFIX = "skos";
 	private static final String SKOS_URI = "http://www.w3.org/2004/02/skos/core#";
-	private static final String SKOS_PREF_LABEL_URI = SKOS_URI + "prefLabel";
 	private static final String SKOS_ALT_LABEL_URI = SKOS_URI + "altLabel";
 	private static final String SKOS_DEFINITION_LABEL_URI = SKOS_URI + "definition";
+	private static final String SKOS_NOTATION_URI = SKOS_URI + "notation";
 	public static final String LANGUAGE_REFSET_DIALECT_MAP_PROPERTIES = "language-refset-dialect-map.properties";
+
+	// NRC URIs
+	private static final String NRC_PREFIX = "sct-ext";
+	private static final String NRC_URI = "http://data.esante.gouv.fr/NRC-France/sct-ext#";
+	private static final String NRC_DEFINITION_STATUS_URI = NRC_URI + "definitionStatus";
+	private static final String NRC_FSN_URI = NRC_URI + "fsn";
+
+	// DC URIs
+	private static final String DC_PREFIX = "dc";
+	private static final String DC_URI = "http://purl.org/dc/elements/1.1/";
+	private static final String DC_TYPE_URI = DC_URI + "type";
+
+	// RDFS URIs
+	private static final String RDFS_URI = "http://www.w3.org/2000/01/rdf-schema#";
+	private static final String RDFS_LABEL = RDFS_URI + "label";
+
+	//
+	private static final String ANGLAIS_USA = "en-us";
+	private static final String ANGLAIS_GB = "en-gb";
+	private static final String ANGLAIS = "en";
 
 	private final OWLOntologyManager manager;
 	private OWLDataFactory factory;
@@ -104,6 +128,9 @@ public class OntologyService {
 
 			if (includeDescriptions) {
 				addDescriptionAnnotations(conceptId, snomedTaxonomy, axioms, langRefsetToDialectMap);
+				addNotationAnnotations(conceptId, axioms);
+				addDefinitionsStatusAnnotations(conceptId, snomedTaxonomy, axioms);
+				addTypeAnnotations(conceptId, snomedTaxonomy, axioms);
 			}
 		}
 
@@ -227,6 +254,8 @@ public class OntologyService {
 		owlDocumentFormat.setPrefixManager(prefixManager);
 		owlDocumentFormat.setDefaultPrefix(SNOMED_CORE_COMPONENTS_URI);
 		owlDocumentFormat.setPrefix(SKOS_PREFIX, SKOS_URI);
+		owlDocumentFormat.setPrefix(NRC_PREFIX, NRC_URI);
+		owlDocumentFormat.setPrefix(DC_PREFIX, DC_URI);
 		return owlDocumentFormat;
 	}
 
@@ -234,6 +263,8 @@ public class OntologyService {
 		SnomedPrefixManager prefixManager = new SnomedPrefixManager();
 		prefixManager.setDefaultPrefix(SNOMED_CORE_COMPONENTS_URI);
 		prefixManager.setPrefix(SKOS_PREFIX, SKOS_URI);
+		prefixManager.setPrefix(NRC_PREFIX, NRC_URI);
+		prefixManager.setPrefix(DC_PREFIX, DC_URI);
 		return prefixManager;
 	}
 
@@ -397,6 +428,7 @@ public class OntologyService {
 	private OWLAnnotationProperty getOwlAnnotationProperty(long typeId) {
 		return factory.getOWLAnnotationProperty(COLON + typeId, prefixManager);
 	}
+
 	private OWLClass getOwlClass(Long conceptId) {
 		return factory.getOWLClass(COLON + conceptId, prefixManager);
 	}
@@ -425,8 +457,9 @@ public class OntologyService {
 
 			if (Concepts.FSN.equals(typeId)) {
 				// Add FSN as "rdfs:label"
+				String labelUri = NRC_FSN_URI;
 				axioms.add(factory.getOWLAnnotationAssertionAxiom(
-						factory.getRDFSLabel(),
+						factory.getOWLAnnotationProperty(IRI.create(labelUri)),
 						IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
 						factory.getOWLLiteral(term, languageAndDialect)));
 			} else {
@@ -435,17 +468,23 @@ public class OntologyService {
 				if (Concepts.SYNONYM.equals(typeId)) {
 					if (acceptabilityMap.values().contains(Concepts.PREFERRED_LONG)) {
 						// Add preferred synonym as "skos:prefLabel"
-						labelUri = SKOS_PREF_LABEL_URI;
+						labelUri = RDFS_LABEL;
+						if (ANGLAIS_USA.equals(languageAndDialect))
+							languageAndDialect = ANGLAIS;
 					} else {
 						// Add other synonym as "skos:altLabel"
 						labelUri = SKOS_ALT_LABEL_URI;
+						if (ANGLAIS_USA.equals(languageAndDialect))
+							languageAndDialect = ANGLAIS;
 					}
 				} else if (Concepts.DEFINITION.equals(typeId)) {
 					// Add Text Definition as "skos:definition"
 					labelUri = SKOS_DEFINITION_LABEL_URI;
+					if (ANGLAIS_USA.equals(languageAndDialect))
+						languageAndDialect = ANGLAIS;
 				}
 
-				if (labelUri != null) {
+				if (labelUri != null && !ANGLAIS_GB.equals(languageAndDialect)) {
 					axioms.add(factory.getOWLAnnotationAssertionAxiom(
 							factory.getOWLAnnotationProperty(IRI.create(labelUri)),
 							IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
@@ -453,6 +492,73 @@ public class OntologyService {
 				}
 			}
 		}
+	}
+
+	private void addNotationAnnotations(Long conceptId, Set<OWLAxiom> axioms) {
+
+		String notationlUri = SKOS_NOTATION_URI;
+
+		axioms.add(factory.getOWLAnnotationAssertionAxiom(
+				factory.getOWLAnnotationProperty(IRI.create(notationlUri)),
+				IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
+				factory.getOWLLiteral(Long.toString(conceptId))));
+
+	}
+
+	private void addDefinitionsStatusAnnotations(Long conceptId, SnomedTaxonomy snomedTaxonomy, Set<OWLAxiom> axioms) {
+
+		String definitionStatusUri = NRC_DEFINITION_STATUS_URI;
+
+		String definitionStatus = null;
+
+		if (snomedTaxonomy.isPrimitive(conceptId) == true) {
+			definitionStatus = "Primitif";
+		} else {
+			definitionStatus = "Défini";
+		}
+
+		axioms.add(factory.getOWLAnnotationAssertionAxiom(
+				factory.getOWLAnnotationProperty(IRI.create(definitionStatusUri)),
+				IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
+				factory.getOWLLiteral(definitionStatus)));
+
+	}
+
+	private void addTypeAnnotations(Long conceptId, SnomedTaxonomy snomedTaxonomy, Set<OWLAxiom> axioms) {
+
+		String typeUri = DC_TYPE_URI;
+
+		for (Description description : snomedTaxonomy.getConceptDescriptions(conceptId)) {
+
+			String typeId = description.getTypeId();
+			String term = description.getTerm();
+
+			if (Concepts.FSN.equals(typeId)) {
+
+				List<Integer> firstIdex = new ArrayList<Integer>();
+				List<Integer> lastIdex = new ArrayList<Integer>();
+
+				for (int i = 0; i < term.length(); i++) {
+
+					if (Character.valueOf('(').compareTo(term.charAt(i)) == 0) {
+
+						firstIdex.add(i);
+					} else if (Character.valueOf(')').compareTo(term.charAt(i)) == 0) {
+
+						lastIdex.add(i);
+					}
+				}
+
+				axioms.add(factory.getOWLAnnotationAssertionAxiom(
+						factory.getOWLAnnotationProperty(IRI.create(typeUri)),
+						IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
+						factory.getOWLLiteral(term.substring(firstIdex.get(firstIdex.size() - 1) + 1,
+								lastIdex.get(lastIdex.size() - 1)))));
+
+			}
+
+		}
+
 	}
 
 	private String getLanguageDialect(Map<Long, String> langRefsetToDialectMap, String language, Map<Long, Long> acceptabilityMap, String typeId) {

@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.service.classification;
 
-import org.ihtsdo.otf.snomedboot.ReleaseImportException;
 import org.junit.Test;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.snomed.otf.owltoolkit.service.ReasonerServiceException;
 import org.snomed.otf.owltoolkit.service.SnomedReasonerService;
 import org.snomed.otf.snomedboot.testutil.ZipUtil;
@@ -35,8 +37,6 @@ import static org.snomed.otf.owltoolkit.service.classification.TestFileUtil.read
 public class EquivalenceClassificationIntegrationTest {
 
 	private SnomedReasonerService snomedReasonerService = new SnomedReasonerService();
-
-	private static final String FINDING_SITE = "363698007";
 
 	/**
 	 * The delta contains a clone of 362969004 | Disorder of endocrine system |
