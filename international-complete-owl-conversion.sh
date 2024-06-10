@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 #
+# Ce fichier a été modifié suite à la modification du nom du projet après le fork.
+#
+
+#
 # This script is for use by the SNOMED International team to convert the International Edition to Complete OWL.
 # The script provides an automated repeatable process to support testing and production of the technical preview.
 # The inputs are the previous release zip and the current release delta zip containing stated relationships and some OWL axioms.
@@ -22,11 +26,11 @@ if [ "$#" -ne 2 ]; then
   exit 1;
 fi
 
-owlToolkitJar="`ls target/snomed-owl-toolkit*-executable.jar | tail -n1`"
+owlToolkitJar="`ls target/outil-owl-snomedct*-executable.jar | tail -n1`"
 snapshot=$1
 delta=$2
 if [ ! -f $owlToolkitJar ]; then
-  echo "SNOMED OWL Toolkit jar not found!"
+  echo "Outil OWL SNOMED CT jar not found!"
   exit 1;
 fi
 if [ ! -f $snapshot ]; then

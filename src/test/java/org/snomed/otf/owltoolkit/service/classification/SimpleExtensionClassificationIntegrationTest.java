@@ -13,35 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.service.classification;
 
 import com.google.common.collect.Sets;
-import org.ihtsdo.otf.snomedboot.ReleaseImportException;
-import org.junit.Before;
 import org.junit.Test;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.snomed.otf.owltoolkit.constants.Concepts;
 import org.snomed.otf.owltoolkit.service.ReasonerServiceException;
 import org.snomed.otf.owltoolkit.service.SnomedReasonerService;
 import org.snomed.otf.snomedboot.testutil.ZipUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.snomed.otf.owltoolkit.service.SnomedReasonerService.ELK_REASONER_FACTORY;
-import static org.snomed.otf.owltoolkit.service.classification.TestFileUtil.readEquivalentConceptLinesTrim;
 import static org.snomed.otf.owltoolkit.service.classification.TestFileUtil.readInferredRelationshipLinesTrim;
 
 public class SimpleExtensionClassificationIntegrationTest {
 
 	private SnomedReasonerService snomedReasonerService = new SnomedReasonerService();
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Test
 	public void testClassifyBaseWithAnthrax() throws IOException, ReasonerServiceException {

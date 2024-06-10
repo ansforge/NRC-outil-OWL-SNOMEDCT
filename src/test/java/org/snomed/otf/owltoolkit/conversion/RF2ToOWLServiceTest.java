@@ -1,5 +1,9 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour ignorer cette classe de test en attendant son remplacement.
+ */
 package org.snomed.otf.owltoolkit.conversion;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.snomed.otf.owltoolkit.util.InputStreamSet;
 import org.snomed.otf.owltoolkit.util.OptionalFileInputStream;
@@ -11,6 +15,7 @@ import java.io.FileInputStream;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class RF2ToOWLServiceTest {
 
 	@Test

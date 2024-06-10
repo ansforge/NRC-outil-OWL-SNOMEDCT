@@ -1,3 +1,6 @@
+/*
+ * Ce fichier a été modifié suite au fork, pour retirer les imports et variables non utilisées dans le code.
+ */
 package org.snomed.otf.owltoolkit.conversion;
 
 import org.ihtsdo.otf.snomedboot.ReleaseImportException;
@@ -21,7 +24,6 @@ import org.snomed.otf.owltoolkit.util.OptionalFileInputStream;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;

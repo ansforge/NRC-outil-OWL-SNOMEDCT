@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 #
+# Ce fichier a été modifié suite à la modification du nom du projet après le fork.
+#
+
+#
 # This script is for use by the SNOMED International team to convert the International release during mid authoring cycle with stated relationships to Complete OWL and reconcile with the published 20190731 Complete OWL release.
 # The script provides an automated repeatable process to support testing and production conversion of mid cycle authoring delta into OWL axioms reference set.
 # The inputs are the snapshot export archive from TermServer with stated relationships(used for OWL conversion), the SNOMED International complete OWL 20190731 release file and the mid cycle authoring delta export archive.
@@ -25,14 +29,14 @@ if [ "$#" -ne 3 ]; then
   exit 1;
 fi
 
-owlToolkitJar="`ls target/snomed-owl-toolkit*-executable.jar | tail -n1`"
+owlToolkitJar="`ls target/outil-owl-snomedct*-executable.jar | tail -n1`"
 termServer_export_snapshot=$1
 published_owl_snapshot=$2
 delta=$3
 
 
 if [ ! -f $owlToolkitJar ]; then
-  echo "SNOMED OWL Toolkit jar not found!"
+  echo "Outil OWL SNOMED CT jar not found!"
   exit 1;
 fi
 if [ ! -f $termServer_export_snapshot ]; then
