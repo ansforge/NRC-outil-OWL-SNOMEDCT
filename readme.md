@@ -1,22 +1,5 @@
-# Outil OWL SNOMED CT
+# Snomed OWL Toolkit [![codecov](https://codecov.io/gh/IHTSDO/snomed-owl-toolkit/branch/master/graph/badge.svg)](https://codecov.io/gh/IHTSDO/snomed-owl-toolkit)
 
-## Fork de l'outil [SNOMED OWL Toolkit](https://github.com/IHTSDO/snomed-owl-toolkit)
-
-Ce fork a été réalisé pour prendre en compte les spécificités nécessaires à la publication de la SNOMED CT dans le SMT.
-
-Nos modifications ajoute le préfixe `sct-ext` (`<http://data.esante.gouv.fr/NRC-France/sct-ext#>`) et ajoute ou modifie les informations suivantes :
-
-| Type d'information  | Cardinalité par concept | Propriété originale | Propriété du fork   |
-|:--------------------|:-----------------------:|:--------------------|:--------------------|
-| Identifiant         | 1..1                    | -                   | skos:notation       |
-| Statut de définition| 1..1                    | -                   | sct-ext:definitionStatus|
-| Suffixe sémantique  | 1..1                    | -                   | dc:type             |
-| FSN                 | 1..1                    | rdfs:label          | sct-ext:fsn             |
-| Terme préféré       | 1..1                    | skos:prefLabel      | rdfs:label          |
-| Synonyme            | 0..*                    | skos:altLabel       | skos:altLabel       |
-| Définition textuelle| 0..1                    | skos:definition     | skos:definition     |
-
-## Introduction
 An Open Source Toolkit to make SNOMED CT to OWL conversion and classification simple.
 
 This toolkit is used within the SNOMED International Authoring Environment. It is backward compatible with all past RF2 releases and will be forward compatible with all future releases. New versions of this tool will be produced as new description logic features are added to SNOMED CT.
@@ -28,12 +11,9 @@ A classification REST API using this toolkit is available, see the [Classificati
   - Works on the command line
   - Uses MRCM Attribute Domain Reference Set for grouping information
   - Uses OWL Axiom Reference Set
-  - Includes:
-    - SNOMED CT identifier as skos:notation
-    - Definition status as sct-ext:definitionStatus
-    - Semantic tag as dc:type
-    - Fully Specified Names as sct-ext:fsn
-    - Preferred Synonyms as rdfs:label
+  - Includes all descriptions:
+    - Fully Specified Names as rdfs:label
+    - Preferred Synonyms as skos:prefLabel
     - Other Synonyms as skos:altLabel
     - Text Definitions as skos:definition
     - Language and dialect markup
