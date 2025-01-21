@@ -5,8 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.snomed.otf</groupId>
+<<<<<<< HEAD
 	<artifactId>outil-owl-snomedct</artifactId>
 	<version>1.0.0</version>
+=======
+	<artifactId>snomed-owl-toolkit</artifactId>
+	<version>5.6.0-SNAPSHOT</version>
+>>>>>>> 7fb5329 (Start 5.6.0-SNAPSHOT)
 
 	<parent>
 		<groupId>org.snomed</groupId>
