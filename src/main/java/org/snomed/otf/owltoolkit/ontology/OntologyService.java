@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import static java.lang.Long.parseLong;
@@ -160,46 +161,14 @@ public class OntologyService {
 		Long conceptModelObjectAttribute = conceptModelObjectAttributePresent ?
 				Concepts.CONCEPT_MODEL_OBJECT_ATTRIBUTE_LONG : Concepts.CONCEPT_MODEL_ATTRIBUTE_LONG;
 
-		Set<Long> descendants = snomedTaxonomy.getDescendants(conceptModelObjectAttribute);
-		for (Long objectAttributeId : descendants) {
-			if (conceptIds != null && !conceptIds.contains(objectAttributeId)) {
-				continue;
-			}
-			for (Relationship relationship : snomedTaxonomy.getStatedRelationships(objectAttributeId)) {
-				if (relationship.getTypeId() == Concepts.IS_A_LONG) {
-					axiomsMap.computeIfAbsent(objectAttributeId, (id) -> new HashSet<>())
-							.add(createOwlSubObjectPropertyOfAxiom(objectAttributeId, relationship.getDestinationId()));
-				}
-			}
-		}
+		addPropertyAxiomsForDescendants(snomedTaxonomy, conceptIds, axiomsMap,
+				conceptModelObjectAttribute, this::createOwlSubObjectPropertyOfAxiom, false);
 
-		if (snomedTaxonomy.getAllConceptIds().contains(Concepts.CONCEPT_MODEL_DATA_ATTRIBUTE_LONG)) {
-			for (Long dataAttributeId : snomedTaxonomy.getDescendants(Concepts.CONCEPT_MODEL_DATA_ATTRIBUTE_LONG)) {
-				if (conceptIds != null && !conceptIds.contains(dataAttributeId)) {
-					continue;
-				}
-				for (Relationship relationship : snomedTaxonomy.getStatedRelationships(dataAttributeId)) {
-					if (relationship.getTypeId() == Concepts.IS_A_LONG) {
-						axiomsMap.computeIfAbsent(dataAttributeId, (id) -> new HashSet<>())
-								.add(createOwlSubDataPropertyOfAxiom(dataAttributeId, relationship.getDestinationId()));
-					}
-				}
-			}
-		}
+		addPropertyAxiomsForDescendants(snomedTaxonomy, conceptIds, axiomsMap,
+				Concepts.CONCEPT_MODEL_DATA_ATTRIBUTE_LONG, this::createOwlSubDataPropertyOfAxiom, true);
 
-		if (snomedTaxonomy.getAllConceptIds().contains(Concepts.CONCEPT_ANNOTATION_ATTRIBUTE_LONG)) {
-			for (Long dataAttributeId : snomedTaxonomy.getDescendants(Concepts.CONCEPT_ANNOTATION_ATTRIBUTE_LONG)) {
-				if (conceptIds != null && !conceptIds.contains(dataAttributeId)) {
-					continue;
-				}
-				for (Relationship relationship : snomedTaxonomy.getStatedRelationships(dataAttributeId)) {
-					if (relationship.getTypeId() == Concepts.IS_A_LONG) {
-						axiomsMap.computeIfAbsent(dataAttributeId, (id) -> new HashSet<>())
-								.add(createOwlSubAnnotationPropertyOfAxiom(dataAttributeId, relationship.getDestinationId()));
-					}
-				}
-			}
-		}
+		addPropertyAxiomsForDescendants(snomedTaxonomy, conceptIds, axiomsMap,
+				Concepts.CONCEPT_ANNOTATION_ATTRIBUTE_LONG, this::createOwlSubAnnotationPropertyOfAxiom, true);
 
 		// Create axioms of all other Snomed concepts
 		Set<Long> attributeIds = snomedTaxonomy.getDescendants(Concepts.CONCEPT_MODEL_ATTRIBUTE_LONG);
@@ -211,29 +180,51 @@ public class OntologyService {
 		attributeIds.remove(Concepts.CONCEPT_MODEL_OBJECT_ATTRIBUTE_LONG);
 		attributeIds.remove(Concepts.CONCEPT_MODEL_DATA_ATTRIBUTE_LONG);
 
+		addConceptClassAxioms(snomedTaxonomy, conceptIds, axiomsMap, attributeIds);
+		return axiomsMap;
+	}
+
+	private void addPropertyAxiomsForDescendants(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds,
+			Map<Long, Set<OWLAxiom>> axiomsMap, Long parentAttributeId,
+			BiFunction<Long, Long, ? extends OWLAxiom> axiomCreator, boolean checkParentExists) {
+		if (checkParentExists && !snomedTaxonomy.getAllConceptIds().contains(parentAttributeId)) {
+			return;
+		}
+		for (Long attributeId : snomedTaxonomy.getDescendants(parentAttributeId)) {
+			if (conceptIds != null && !conceptIds.contains(attributeId)) {
+				continue;
+			}
+			for (Relationship relationship : snomedTaxonomy.getStatedRelationships(attributeId)) {
+				if (relationship.getTypeId() == Concepts.IS_A_LONG) {
+					axiomsMap.computeIfAbsent(attributeId, (id) -> new HashSet<>())
+							.add(axiomCreator.apply(attributeId, relationship.getDestinationId()));
+				}
+			}
+		}
+	}
+
+	private void addConceptClassAxioms(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds,
+			Map<Long, Set<OWLAxiom>> axiomsMap, Set<Long> attributeIds) {
 		for (Long conceptId : snomedTaxonomy.getAllConceptIds()) {
 			if (conceptIds != null && !conceptIds.contains(conceptId)) {
 				continue;
 			}
 			// Convert any stated relationships to axioms
-			boolean primitive = snomedTaxonomy.isPrimitive(conceptId);
 			Collection<Relationship> statedRelationships = snomedTaxonomy.getStatedRelationships(conceptId);
 
 			if (!statedRelationships.isEmpty() && !attributeIds.contains(conceptId)) {
 				AxiomRepresentation representation = new AxiomRepresentation();
-				representation.setPrimitive(primitive);
+				representation.setPrimitive(snomedTaxonomy.isPrimitive(conceptId));
 				representation.setLeftHandSideNamedConcept(conceptId);
 				Map<Integer, List<Relationship>> relationshipMap = new HashMap<>();
 				for (Relationship statedRelationship : statedRelationships) {
 					relationshipMap.computeIfAbsent(statedRelationship.getGroup(), g -> new ArrayList<>()).add(statedRelationship);
 				}
 				representation.setRightHandSideRelationships(relationshipMap);
-				OWLClassAxiom conceptAxiom = createOwlClassAxiom(representation);
 				axiomsMap.computeIfAbsent(conceptId, (id) -> new HashSet<>())
-						.add(conceptAxiom);
+						.add(createOwlClassAxiom(representation));
 			}
 		}
-		return axiomsMap;
 	}
 
 	public Map<Long, Set<OWLAxiom>> createAxiomsFromStatedRelationships(SnomedTaxonomy snomedTaxonomy) {
