@@ -113,8 +113,8 @@ public final class RelationshipFragment implements SemanticComparable<Relationsh
 		}
 
 		// noinspection UnnecessaryLocalVariable
-		RelationshipFragment A = other;
-		RelationshipFragment B = this;
+		RelationshipFragment a = other;
+		RelationshipFragment b = this;
 
 		/*
 		 * We will return true if A is redundant.
@@ -136,32 +136,32 @@ public final class RelationshipFragment implements SemanticComparable<Relationsh
 		 *
 		 */
 
-		final Set<Long> BAttributeClosure = getTransitiveClosure(B.getTypeId());
+		final Set<Long> bAttributeClosure = getTransitiveClosure(b.getTypeId());
 
-		if (!A.isConcreteValue()) {
-			final Set<Long> BValueClosure = getTransitiveClosure(B.getDestinationId());
+		if (!a.isConcreteValue()) {
+			final Set<Long> bValueClosure = getTransitiveClosure(b.getDestinationId());
 
 			// Rule 1
-			if (BAttributeClosure.contains(A.getTypeId()) && BValueClosure.contains(A.getDestinationId())) {
+			if (bAttributeClosure.contains(a.getTypeId()) && bValueClosure.contains(a.getDestinationId())) {
 				return true;
 			}
 
 			// Rule 2
 			else {
 				Set<PropertyChain> relevantPropertyChains = relationshipNormalFormGenerator.getPropertyChains().stream()
-						.filter(propertyChain -> BAttributeClosure.contains(propertyChain.getSourceType()))
-						.filter(propertyChain -> propertyChain.getInferredType().equals(A.getTypeId()))
+						.filter(propertyChain -> bAttributeClosure.contains(propertyChain.getSourceType()))
+						.filter(propertyChain -> propertyChain.getInferredType().equals(a.getTypeId()))
 						.collect(Collectors.toSet());
 				for (PropertyChain propertyChain : relevantPropertyChains) {
-					if (getPropertyChainTransitiveClosure(B.getDestinationId(), propertyChain.getDestinationType())
-							.contains(A.getDestinationId())) {
+					if (getPropertyChainTransitiveClosure(b.getDestinationId(), propertyChain.getDestinationType())
+							.contains(a.getDestinationId())) {
 						return true;
 					}
 				}
 			}
 		} else {
 			// Rule 1
-			if (BAttributeClosure.contains(A.getTypeId()) && A.getValue() != null && A.getValue().equals(B.getValue())) {
+			if (bAttributeClosure.contains(a.getTypeId()) && a.getValue() != null && a.getValue().equals(b.getValue())) {
 				return true;
 			}
 
