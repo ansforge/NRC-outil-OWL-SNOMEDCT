@@ -81,6 +81,16 @@ public final class GroupSet extends AbstractSet<Group> {
 		return groups.size();
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+		return super.equals(o);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	public void adjustOrder(final GroupSet previousInferredSet) {
 		if (isEmpty()) {
 			return;

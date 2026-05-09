@@ -511,7 +511,7 @@ public class OntologyService {
 
 		String definitionStatus = null;
 
-		if (snomedTaxonomy.isPrimitive(conceptId) == true) {
+		if (snomedTaxonomy.isPrimitive(conceptId)) {
 			definitionStatus = "Primitif";
 		} else {
 			definitionStatus = "Défini";
@@ -540,10 +540,10 @@ public class OntologyService {
 
 				for (int i = 0; i < term.length(); i++) {
 
-					if (Character.valueOf('(').compareTo(term.charAt(i)) == 0) {
+					if (term.charAt(i) == '(') {
 
 						firstIdex.add(i);
-					} else if (Character.valueOf(')').compareTo(term.charAt(i)) == 0) {
+					} else if (term.charAt(i) == ')') {
 
 						lastIdex.add(i);
 					}
