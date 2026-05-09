@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class InputStreamSet extends HashSet<InputStream> implements AutoCloseable {
+public class InputStreamSet implements AutoCloseable {
 
 	private final Set<InputStream> fileInputStreams;
 
