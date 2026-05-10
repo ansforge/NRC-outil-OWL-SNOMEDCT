@@ -108,9 +108,10 @@ public final class GroupSet extends AbstractSet<Group> {
 			}
 		}
 
-		for (Group groupToAdjust : newNumberMap.keySet()) {
+		for (Map.Entry<Group, Integer> entry : newNumberMap.entrySet()) {
+			final Group groupToAdjust = entry.getKey();
 			final int oldNumber = groupToAdjust.getGroupNumber();
-			final int newNumber = newNumberMap.get(groupToAdjust);
+			final int newNumber = entry.getValue();
 
 			final Group swap = oldNumberMap.get(newNumber);
 			if (swap != null) {

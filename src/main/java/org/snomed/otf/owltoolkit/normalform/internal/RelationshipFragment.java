@@ -32,6 +32,9 @@ import org.snomed.otf.owltoolkit.normalform.RelationshipNormalFormGenerator;
 import org.snomed.otf.owltoolkit.normalform.transitive.NodeGraph;
 import org.snomed.otf.owltoolkit.ontology.PropertyChain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,6 +47,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * originating from different sources are being processed.
  */
 public final class RelationshipFragment implements SemanticComparable<RelationshipFragment> {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipFragment.class);
 
 	private RelationshipNormalFormGenerator relationshipNormalFormGenerator;
 	private final Relationship fragment;
@@ -109,7 +114,7 @@ public final class RelationshipFragment implements SemanticComparable<Relationsh
 		}
 
 		if (this.getTypeId() == 116680003L && other.getTypeId() == 116680003L) {
-			System.out.println("Two IS As compared");
+			LOGGER.debug("Two IS As compared");
 		}
 
 		// noinspection UnnecessaryLocalVariable
@@ -234,6 +239,6 @@ public final class RelationshipFragment implements SemanticComparable<Relationsh
 
 	@Override
 	public String toString() {
-		return MessageFormat.format("%s : %s", getTypeId(), getDestinationId() != -1 ? getDestinationId() : getValue());
+		return MessageFormat.format("{0} : {1}", getTypeId(), getDestinationId() != -1 ? getDestinationId() : getValue());
 	}
 }
