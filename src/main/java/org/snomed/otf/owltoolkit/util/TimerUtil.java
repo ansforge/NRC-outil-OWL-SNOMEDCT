@@ -28,14 +28,14 @@ public class TimerUtil {
 
 	public void checkpoint(String name) {
 		final long now = new Date().getTime();
-		float millisTaken = now - lastCheck;
+		float millisTaken = (float) now - lastCheck;
 		lastCheck = now;
 		log("Timer {}: {} took {} seconds", timerName, name, millisTaken / 1000f);
 	}
 
 	public void finish() {
 		final long now = new Date().getTime();
-		float millisTaken = now - start;
+		float millisTaken = (float) now - start;
 		log("Timer {}: total took {} seconds", timerName, millisTaken / 1000f);
 	}
 
